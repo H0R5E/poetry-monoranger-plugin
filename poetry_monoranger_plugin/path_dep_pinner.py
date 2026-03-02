@@ -98,7 +98,7 @@ class PathDepPinner:
         non_included_deps = dep_grp._dependencies
         if hasattr(dep_grp, "._poetry_dependencies"):
             non_included_deps += dep_grp._poetry_dependencies
-        
+
         non_included_deps_set = set(non_included_deps)
 
         directory_deps = []

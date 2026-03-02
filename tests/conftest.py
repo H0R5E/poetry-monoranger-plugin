@@ -72,7 +72,7 @@ def mock_event_gen_include():
 
         main_grp = DependencyGroup(MAIN_GROUP)
         main_grp.add_dependency(Dependency("numpy", "==1.5.0"))
-        main_grp.include_dependency_group(sub_group) # type: ignore
+        main_grp.include_dependency_group(sub_group)  # type: ignore[attr-defined]
 
         mock_command = Mock(spec=command_cls)
         mock_command.poetry = Mock(spec=Poetry)

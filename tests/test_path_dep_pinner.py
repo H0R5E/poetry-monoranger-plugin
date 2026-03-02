@@ -1,16 +1,15 @@
 import copy
 from unittest.mock import Mock, patch
 
+import poetry.__version__ as poetry_version
 import pytest
+from packaging import version
 from poetry.console.commands.build import BuildCommand
 from poetry.core.packages.directory_dependency import DirectoryDependency
 from poetry.core.pyproject.toml import PyProjectTOML
-import poetry.__version__ as poetry_version
 
 from poetry_monoranger_plugin.config import MonorangerConfig
 from poetry_monoranger_plugin.path_dep_pinner import PathDepPinner
-
-from packaging import version
 
 POETRY_V22 = version.parse(poetry_version.__version__) >= version.parse("2.2")
 
