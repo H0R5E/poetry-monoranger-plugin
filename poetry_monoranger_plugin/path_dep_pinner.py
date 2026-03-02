@@ -95,11 +95,15 @@ class PathDepPinner:
         deps_for_locking = {dep.name: dep for dep in dep_grp.dependencies_for_locking}  # type: ignore[attr-defined]
 
         # Do not return dependencies from included groups
-        non_included_deps = set(dep_grp._dependencies + dep_grp._poetry_dependencies)
+        non_included_deps = dep_grp._dependencies
+        if hasattr(dep_grp, "._poetry_dependencies"):
+            non_included_deps += dep_grp._poetry_dependencies
+        
+        non_included_deps_set = set(non_included_deps)
 
         directory_deps = []
         for dep in dep_grp.dependencies:
-            if dep not in non_included_deps:
+            if dep not in non_included_deps_set:
                 continue
             elif isinstance(dep, DirectoryDependency):
                 dir_dep = dep
