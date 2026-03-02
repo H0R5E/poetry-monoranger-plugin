@@ -58,7 +58,8 @@ class PathDepPinner:
         # Support include_groups options used with the main group
         if hasattr(main_deps_group, "_included_dependency_groups"):
             included_dependency_groups = main_deps_group._included_dependency_groups
-            all_groups.extend(included_dependency_groups.values())
+            print(included_dependency_groups)
+            #all_groups.extend(included_dependency_groups.values())
         
         for dep_group in all_groups:
             self._pin_dep_grp(dep_group, io)
