@@ -54,15 +54,14 @@ class PathDepPinner:
 
         main_deps_group = poetry.package.dependency_group(MAIN_GROUP)
         all_groups = [main_deps_group]
-        
-        # Support include_groups options used with the main group
+
+        # Iterate through include_groups associated with the main group
         if hasattr(main_deps_group, "_included_dependency_groups"):
             included_dependency_groups = main_deps_group._included_dependency_groups
-            print(included_dependency_groups)
-            #all_groups.extend(included_dependency_groups.values())
-        
-        for dep_group in all_groups:
-            self._pin_dep_grp(dep_group, io)
+            all_groups.extend(included_dependency_groups.values())
+
+        for deps_group in all_groups:
+            self._pin_dep_grp(deps_group, io)
 
     def _pin_dep_grp(self, dep_gpr: DependencyGroup, io: IO):
         directory_deps = self._get_directory_deps(dep_gpr)
@@ -95,9 +94,14 @@ class PathDepPinner:
         # Required to have type: ignore[attr-defined] as the attribute is only defined in Poetry >=2.0.0
         deps_for_locking = {dep.name: dep for dep in dep_grp.dependencies_for_locking}  # type: ignore[attr-defined]
 
+        # Do not return dependencies from included groups
+        non_included_deps = set(dep_grp._dependencies + dep_grp._poetry_dependencies)
+
         directory_deps = []
         for dep in dep_grp.dependencies:
-            if isinstance(dep, DirectoryDependency):
+            if dep not in non_included_deps:
+                continue
+            elif isinstance(dep, DirectoryDependency):
                 dir_dep = dep
             elif isinstance(deps_for_locking.get(dep.name, None), DirectoryDependency):
                 dir_dep = cast(DirectoryDependency, deps_for_locking[dep.name])
