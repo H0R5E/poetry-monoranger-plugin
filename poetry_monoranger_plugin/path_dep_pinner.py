@@ -53,7 +53,15 @@ class PathDepPinner:
         poetry = command.poetry
 
         main_deps_group = poetry.package.dependency_group(MAIN_GROUP)
-        self._pin_dep_grp(main_deps_group, io)
+        all_groups = [main_deps_group]
+        
+        # Support include_groups options used with the main group
+        if hasattr(main_deps_group, "_included_dependency_groups"):
+            included_dependency_groups = main_deps_group._included_dependency_groups
+            all_groups.extend(included_dependency_groups.values())
+        
+        for dep_group in all_groups:
+            self._pin_dep_grp(dep_group, io)
 
     def _pin_dep_grp(self, dep_gpr: DependencyGroup, io: IO):
         directory_deps = self._get_directory_deps(dep_gpr)
