@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 def mock_event_gen():
     def _factory(command_cls: type[Command], disable_cache: bool):
         main_grp = DependencyGroup(MAIN_GROUP)
-        main_grp.add_dependency(Dependency("numpy", "==1.5.0"))
+        main_grp.add_dependency(Dependency("numpy", "==2.1.1"))
         main_grp.add_dependency(
             DirectoryDependency(
                 "packageB",
@@ -71,7 +71,7 @@ def mock_event_gen_include():
         )
 
         main_grp = DependencyGroup(MAIN_GROUP)
-        main_grp.add_dependency(Dependency("numpy", "==1.5.0"))
+        main_grp.add_dependency(Dependency("numpy", "==2.1.1"))
         main_grp.include_dependency_group(sub_group)  # type: ignore[attr-defined]
 
         mock_command = Mock(spec=command_cls)
